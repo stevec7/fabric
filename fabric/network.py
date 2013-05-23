@@ -334,7 +334,13 @@ def connect(user, host, port, sock=None):
 
     # Initialize loop variables
     connected = False
-    password = get_password()
+    if env.use_hostbased:
+        password = None
+        hostbased = True
+    else:
+        password = get_password()
+        hostbased = False
+
     tries = 0
 
     # Loop until successful connect (keep prompting for new password)
@@ -351,7 +357,8 @@ def connect(user, host, port, sock=None):
                 timeout=env.timeout,
                 allow_agent=not env.no_agent,
                 look_for_keys=not env.no_keys,
-                sock=sock
+                sock=sock,
+                hostbased=hostbased
             )
             connected = True
 
